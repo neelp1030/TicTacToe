@@ -14,9 +14,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button[][] buttons = new Button[3][3];
 
+    private Button[] winSpaces = new Button[3];
+
+    private Button btResetRound;
     private Button btPlayAgain;
 
     private boolean p1Turn = true;
+    private boolean roundEnded = false;
 
     private int turnCount;
 
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        btResetRound = findViewById(R.id.bt_reset_round);
         btPlayAgain = findViewById(R.id.bt_play_again);
 
         tvP1Score = findViewById(R.id.tv_p1_score);
@@ -49,10 +54,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        Button btResetRound = findViewById(R.id.bt_reset_round);
         btResetRound.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
+                // if the round has ended (a player has won or there has been a draw) and the 'Reset Round' button has been pressed instead of the 'Play Again' button, the 'Play Again' button should become unclickable again
+                // if (roundEnded) {
+                //    btPlayAgain.setClickable(false);
+                //    btPlayAgain.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btUnclickable)));
+                // }
+
                 resetGrid();
             }
         });
@@ -63,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 resetGrid();
 
+                btResetRound.setClickable(true);
+                btResetRound.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btClickable)));
+
                 btPlayAgain.setClickable(false);
                 btPlayAgain.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btUnclickable)));
             }
@@ -70,8 +84,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btResetGame = findViewById(R.id.bt_reset_game);
         btResetGame.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
+                // if the round has ended (a player has won or there has been a draw) and the 'Reset Game' button has been pressed instead of the 'Play Again' button, the 'Play Again' button should become unclickable again
+                if (roundEnded) {
+                    btResetRound.setClickable(true);
+                    btResetRound.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btClickable)));
+
+                    btPlayAgain.setClickable(false);
+                    btPlayAgain.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btUnclickable)));
+                }
+
                 resetGame();
             }
         });
@@ -80,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View v) {
+        // if the round has ended (a player has won or there has been a draw), any clicking activities on the spaces within the 3x3 grid should be completely ignored until a new round is started
+        if (roundEnded) {
+            return;
+        }
+
         // if the text of the space clicked on within the 3x3 grid isn't empty, that means it is either 'X' or 'O', and hence the clicking activity should be ignored
         if (!(((Button) v).getText().toString().equals(""))) {
             return;
@@ -90,12 +119,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (p1Turn) {
             ((Button) v).setText("X");
             ((Button) v).setTextColor(getResources().getColor(R.color.p1Color));
+            // v.setClickable(false);
         }
 
         // if Player 1 didn't click on the empty space, then it must have been Player 2, so occupy the empty space with 'O' and make the text color red as per convention
         else {
             ((Button) v).setText("O");
             ((Button) v).setTextColor(getResources().getColor(R.color.p2Color));
+            // v.setClickable(false);
         }
 
         // at this point, since a valid turn has taken place, increment the turn count
@@ -148,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < 3; i++) {
             // if the text of all 3 buttons in the row is identical and the identical text isn't empty, that means it is either 'X' or 'O', so it's a win case
             if ((grid[i][0].equals(grid[i][1])) && (grid[i][1].equals(grid[i][2])) && !(grid[i][0].equals(""))) {
+                winSpaces = new Button[]{buttons[i][0], buttons[i][1], buttons[i][2]};
                 return true;
             }
         }
@@ -156,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < 3; i++) {
             // if the text of all 3 buttons in the column is identical and the identical text isn't empty, that means it is either 'X' or 'O', so it's a win case
             if ((grid[0][i].equals(grid[1][i])) && (grid[1][i].equals(grid[2][i])) && !(grid[0][i].equals(""))) {
+                winSpaces = new Button[]{buttons[0][i], buttons[1][i], buttons[2][i]};
                 return true;
             }
         }
@@ -165,12 +198,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // check first diagonal win case that goes from top-left corner to bottom-right corner
         // if the text of all 3 buttons in the diagonal is identical and the identical text isn't empty, that means it is either 'X' or 'O', so it's a win case
         if ((grid[0][0].equals(grid[1][1])) && (grid[1][1].equals(grid[2][2])) && !(grid[0][0].equals(""))) {
+            winSpaces = new Button[]{buttons[0][0], buttons[1][1], buttons[2][2]};
             return true;
         }
 
         // check second diagonal win case that goes from bottom-left corner to top-right corner
         // if the text of all 3 buttons in the diagonal is identical and the identical text isn't empty, that means it is either 'X' or 'O', so it's a win case
         if ((grid[2][0].equals(grid[1][1])) && (grid[1][1].equals(grid[0][2])) && !(grid[2][0].equals(""))) {
+            winSpaces = new Button[]{buttons[2][0], buttons[1][1], buttons[0][2]};
             return true;
         }
 
@@ -181,12 +216,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void p1Wins() {
         p1Points++;
+        roundEnded = true;
         // Toast.makeText(this, "Player 1 wins!", Toast.LENGTH_SHORT).show();
         tvGameStatus.setText("Player 1 wins!");
         updateScore();
 
+        btResetRound.setClickable(false);
+        btResetRound.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btUnclickable)));
+
         btPlayAgain.setClickable(true);
         btPlayAgain.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btClickable)));
+
+        winSpaces[0].setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.winSpaceBackground)));
+        winSpaces[1].setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.winSpaceBackground)));
+        winSpaces[2].setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.winSpaceBackground)));
 
         // resetGrid();
     }
@@ -194,20 +237,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void p2Wins() {
         p2Points++;
+        roundEnded = true;
         // Toast.makeText(this, "Player 2 wins!", Toast.LENGTH_SHORT).show();
         tvGameStatus.setText("Player 2 wins!");
         updateScore();
 
+        btResetRound.setClickable(false);
+        btResetRound.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btUnclickable)));
+
         btPlayAgain.setClickable(true);
         btPlayAgain.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btClickable)));
+
+        winSpaces[0].setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.winSpaceBackground)));
+        winSpaces[1].setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.winSpaceBackground)));
+        winSpaces[2].setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.winSpaceBackground)));
 
         // resetGrid();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void draw() {
+        roundEnded = true;
         // Toast.makeText(this, "Draw!", Toast.LENGTH_SHORT).show();
         tvGameStatus.setText("Draw!");
+
+        btResetRound.setClickable(false);
+        btResetRound.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btUnclickable)));
 
         btPlayAgain.setClickable(true);
         btPlayAgain.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.btClickable)));
@@ -221,20 +276,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvP2Score.setText(Integer.toString(p2Points));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void resetGrid() {
         // traverse through the rows and columns of the 3x3 grid, reverting each space to be unoccupied
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 buttons[i][j].setText("");
+                buttons[i][j].setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.transparentBackground)));
             }
         }
 
         // revert turn count back to 0 and make it Player 1's turn, since Player 1 ('X') always starts the round
         turnCount = 0;
         p1Turn = true;
+        roundEnded = false;
         tvGameStatus.setText("Player 1's turn");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void resetGame() {
         // resetting the game reverts the score to 0 - 0 in addition to resetting the grid/round.
         resetGrid();

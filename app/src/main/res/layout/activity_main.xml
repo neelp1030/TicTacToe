@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
 
@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
             android:text="Player 1"
-            android:textColor="#2292EA"
+            android:textAllCaps="false"
+            android:textColor="@color/p1ColorLight"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
             android:text="Player 2"
-            android:textColor="#FF0000"
+            android:textColor="@color/p2ColorLight"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,9 +52,9 @@
             android:id="@+id/tv_vs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/montserrat_bold"
             android:text="Vs"
-            android:textColor="#FFFFFF"
+            android:textColor="#E43333"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_p2"
             app:layout_constraintStart_toEndOf="@+id/tv_p1"
@@ -97,7 +98,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_medium"
         android:text="Player 1's turn!"
-        android:textColor="#00BF0E"
+        android:textColor="#29DD3C"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/tableLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,10 +110,11 @@
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:background="@drawable/grid_background"
         android:divider="@drawable/horizontal_divider"
         android:showDividers="middle"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -123,7 +125,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:baselineAligned="false"
             android:divider="@drawable/vertical_divider"
@@ -134,34 +136,30 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="@color/p1Color"
-                android:textSize="36sp"
-                tools:text="X" />
+                android:textSize="36sp" />
 
             <Button
                 android:id="@+id/bt_01"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="@color/p2Color"
-                android:textSize="36sp"
-                tools:text="O" />
+                android:textAllCaps="false"
+                android:textSize="36sp" />
 
             <Button
                 android:id="@+id/bt_02"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="#FFFFFF"
                 android:textSize="36sp" />
         </TableRow>
 
@@ -178,10 +176,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="#FFFFFF"
                 android:textSize="36sp" />
 
             <Button
@@ -189,10 +186,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="#FFFFFF"
                 android:textSize="36sp" />
 
             <Button
@@ -200,10 +196,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="#FFFFFF"
                 android:textSize="36sp" />
         </TableRow>
 
@@ -220,10 +215,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="#FFFFFF"
                 android:textSize="36sp" />
 
             <Button
@@ -231,10 +225,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="#FFFFFF"
                 android:textSize="36sp" />
 
             <Button
@@ -242,10 +235,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#000000"
+                android:backgroundTint="@color/transparentBackground"
                 android:fontFamily="@font/montserrat_bold"
                 android:padding="0dp"
-                android:textColor="#FFFFFF"
                 android:textSize="36sp" />
         </TableRow>
 
@@ -268,6 +260,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/btClickable"
             android:fontFamily="@font/montserrat_bold"
+            android:shadowColor="#FFFFFF"
             android:text="Reset Round"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
